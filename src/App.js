@@ -1,19 +1,29 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import './App.css';
+
+import { Route, Switch } from 'react-router';
+import Home from './components/Home';
+import Navigation from './components/Navigation';
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <div className="App-header">
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+      <div>
+        <Navigation {...this.props.auth.toJS()} />
+        <Switch>
+          <Route exact path="/" component={Home} />
+        </Switch>
       </div>
     );
   }
 }
 
-export default App;
+function mapStateToProps(state) {
+  return {
+    auth: state.auth,
+    router: state.router
+  }
+}
+
+export default connect(mapStateToProps)(App);
