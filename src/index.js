@@ -8,7 +8,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 
 // redux
 import { Provider } from 'react-redux';
-import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import reducers from './reducers';
 
 // router-redux
@@ -27,8 +27,10 @@ const store = createStore(
     ...reducers,
     router: routerReducer
   }),
-  applyMiddleware(middleware),
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  compose(
+    applyMiddleware(middleware),
+    window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__() : f => f
+  )
 );
 
 ReactDOM.render(
