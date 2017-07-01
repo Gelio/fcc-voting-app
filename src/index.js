@@ -6,28 +6,36 @@ import registerServiceWorker from './registerServiceWorker';
 
 import 'bootstrap/dist/css/bootstrap.css';
 
-// Router
-import { BrowserRouter } from 'react-router-dom';
-import { Router, Route,  } from 'react-router';
-import { routerReducer  } from 'react-router-redux';
-
-// Redux
+// redux
 import { Provider } from 'react-redux';
-import { createStore, combineReducers } from 'redux';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
 import reducers from './reducers';
+
+// router-redux
+import createHistory from 'history/createBrowserHistory';
+import {
+  ConnectedRouter,
+  routerReducer,
+  routerMiddleware
+} from 'react-router-redux';
+
+const history = createHistory();
+const middleware = routerMiddleware(history);
 
 const store = createStore(
   combineReducers({
-  ...reducers
-}));
-
-
+    ...reducers,
+    router: routerReducer
+  }),
+  applyMiddleware(middleware),
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
 
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter>
+    <ConnectedRouter history={history}>
       <App />
-    </BrowserRouter>
+    </ConnectedRouter>
   </Provider>,
   document.getElementById('root')
 );
