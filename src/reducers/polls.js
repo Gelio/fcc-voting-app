@@ -1,5 +1,10 @@
 import { List, fromJS } from 'immutable';
-import { ADD_POLL, REMOVE_POLL, VOTE, SET_VISIBLE_POLLS } from '../actions/polls';
+import {
+  ADD_POLL,
+  REMOVE_POLL,
+  VOTE,
+  SET_VISIBLE_POLLS
+} from '../actions/polls';
 
 const defaultState = fromJS({
   polls: {},
@@ -25,7 +30,7 @@ function polls(state = defaultState, action) {
       return state.updateIn(['polls', action.pollId, 'options'], options =>
         options.update(action.optionId, 0, x => x + 1)
       );
-    
+
     case SET_VISIBLE_POLLS:
       return state.set('visiblePolls', List(action.pollIds));
 
