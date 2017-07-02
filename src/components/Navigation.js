@@ -46,11 +46,11 @@ class Navigation extends Component {
         </button>
 
         <h1 className="navbar-brand mb-0">
-          <Link to="/">Voting App</Link>
+          <Link to="/" className="navbar-brand">Voting App</Link>
         </h1>
 
         <div className={'navbar-collapse' + (this.state.collapsed ? ' collapse' : '')}>
-          <ul className="navbar-nav">
+          <ul className="navbar-nav ml-auto">
             <li className="nav-item">
               <AppNavLink exact to="/">
                 Home
