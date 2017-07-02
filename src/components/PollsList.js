@@ -15,8 +15,8 @@ const PollsList = ({ polls }) => {
   return (
     <ul>
       {polls.map(poll =>
-        <li>
-          <Poll key={poll.pollId} {...poll} />
+        <li key={poll.pollId}>
+          <Poll {...poll} />
         </li>
       )}
     </ul>
