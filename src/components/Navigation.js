@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link, NavLink } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 const AppNavLink = ({ exact, to, children }) => {
   return (
@@ -71,6 +72,10 @@ class Navigation extends Component {
       </nav>
     );
   }
+}
+
+Navigation.propTypes = {
+  authenticated: PropTypes.bool.isRequired
 }
 
 export default Navigation;

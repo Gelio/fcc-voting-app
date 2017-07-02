@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { Link } from 'react-router-dom';
 
@@ -20,6 +21,17 @@ const PollsList = ({ polls }) => {
       )}
     </ul>
   );
+};
+
+PollsList.propTypes = {
+  polls: PropTypes.arrayOf(PropTypes.shape({
+    pollId: PropTypes.any,
+    title: PropTypes.string,
+    owner: PropTypes.shape({
+      ownerId: PropTypes.any,
+      name: PropTypes.string
+    })
+  }))
 };
 
 export default PollsList;
