@@ -4,6 +4,9 @@ import { fetchSinglePoll } from '../actions/polls';
 
 import { denormalizePoll } from '../utilities';
 
+import SinglePollComponent from '../components/SinglePoll';
+import PageContainer from '../components/PageContainer';
+
 class SinglePoll extends Component {
   componentWillMount() {
     if (!this.props.poll) {
@@ -12,14 +15,32 @@ class SinglePoll extends Component {
   }
 
   render() {
-    const { poll, pollId } = this.props;
+    const { poll, isFetching } = this.props;
+
+    if (poll) {
+      return (
+        <PageContainer>
+          <SinglePollComponent poll={poll} />
+        </PageContainer>
+      );
+    }
+
+    if (isFetching) {
+      return (
+        <PageContainer>
+          <div className="alert alert-info">
+            Fetching the polls, please wait...
+          </div>
+        </PageContainer>
+      );
+    }
 
     return (
-      <div className="container mt-2">
-        <p>Single poll with id: {pollId}</p>
-        Poll data:
-        <pre>{JSON.stringify(poll, null, '  ')}</pre>
-      </div>
+      <PageContainer>
+        <div className="alert alert-warning">
+          Error occurred while fetching the poll.
+        </div>
+      </PageContainer>
     );
   }
 }
@@ -31,7 +52,8 @@ function mapStateToProps(state, props) {
 
   return {
     poll: denormalizePoll(owners, polls.get(pollId)),
-    pollId
+    pollId,
+    isFetching: state.polls.get('isFetching')
   };
 }
 
