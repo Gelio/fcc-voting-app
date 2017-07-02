@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { fetchPolls } from '../actions/polls';
 
 import PollsList from '../components/PollsList';
+import PageContainer from '../components/PageContainer';
 
 import { denormalizePoll } from '../utilities';
 
@@ -18,10 +19,10 @@ class Polls extends Component {
   render() {
     const { polls } = this.props;
     return (
-      <div className="container mt-2">
+      <PageContainer>
         <h1>Polls list</h1>
         {polls.length > 0 ? <PollsList polls={polls} /> : <NoPollsAvailable />}
-      </div>
+      </PageContainer>
     );
   }
 }
