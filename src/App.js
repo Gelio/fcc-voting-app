@@ -11,7 +11,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Navigation {...this.props.auth.toJS()} />
+        <Navigation authenticated={this.props.auth.get('authenticated')} />
         <Switch>
           <Route exact path="/" component={Home} />
         </Switch>

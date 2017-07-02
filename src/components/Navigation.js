@@ -30,7 +30,7 @@ class Navigation extends Component {
   }
 
   render() {
-    const { authenticated, username } = this.props;
+    const { authenticated } = this.props;
 
     return (
       <nav className="navbar navbar-toggleable navbar-light bg-faded">
