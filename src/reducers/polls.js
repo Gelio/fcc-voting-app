@@ -7,7 +7,10 @@ import {
   ADD_OWNER,
   FETCH_POLLS_BEGIN,
   FETCH_POLLS_ERROR,
-  FETCH_POLLS_SUCCESS
+  FETCH_POLLS_SUCCESS,
+  FETCH_SINGLE_POLL_REQUEST,
+  FETCH_SINGLE_POLL_ERROR,
+  FETCH_SINGLE_POLL_SUCCESS
 } from '../actions/polls';
 
 const defaultState = fromJS({
@@ -42,10 +45,13 @@ function polls(state = defaultState, action) {
       return state.set('visiblePolls', List(action.pollIds));
 
     case ADD_OWNER:
-      return state.setIn(['owners', action.ownerId], Map({
-        ownerId: action.ownerId,
-        name: action.name
-      }));
+      return state.setIn(
+        ['owners', action.ownerId],
+        Map({
+          ownerId: action.ownerId,
+          name: action.name
+        })
+      );
 
     case FETCH_POLLS_BEGIN:
       return state.merge({
@@ -66,6 +72,27 @@ function polls(state = defaultState, action) {
         polls: state.get('polls').merge(action.polls),
         visiblePolls: List(action.visiblePolls),
         owners: state.get('owners').merge(action.owners)
+      });
+
+    case FETCH_SINGLE_POLL_REQUEST:
+      return state.merge({
+        isFetching: true,
+        fetchingError: null
+      });
+
+    case FETCH_SINGLE_POLL_ERROR:
+      return state.merge({
+        isFetching: false,
+        fetchingError: action.error
+      });
+
+    case FETCH_SINGLE_POLL_SUCCESS:
+      return state.merge({
+        isFetching: false,
+        fetchingError: null,
+        polls: state.get('polls').set(action.poll.pollId, Map(action.poll)),
+        visiblePolls: state.get('visiblePolls').push(action.poll.pollId),
+        owners: state.get('owners').set(action.owner.ownerId, Map(action.owner))
       });
 
     default:

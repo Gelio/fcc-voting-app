@@ -1,4 +1,7 @@
 import fetch from 'isomorphic-fetch';
+import { getOwnerFromPoll, getNormalizedPoll } from '../utilities';
+
+const apiDataUrl = 'http://beta.json-generator.com/api/json/get/NkS8ZNzVm';
 
 export const ADD_POLL = 'ADD_POLL';
 export function addPoll(pollId, ownerId, title, options) {
@@ -76,7 +79,7 @@ export function fetchPolls() {
   return dispatch => {
     dispatch(fetchPollsBegin());
 
-    return fetch('http://beta.json-generator.com/api/json/get/NkS8ZNzVm')
+    return fetch(apiDataUrl)
       .then(response => response.json())
       .then(body => {
         const polls = {};
@@ -84,21 +87,54 @@ export function fetchPolls() {
         const owners = {};
 
         for (const poll of body) {
-          polls[poll.id] = {
-            pollId: poll.id,
-            ownerId: poll.owner.id,
-            title: poll.title,
-            options: poll.options
-          };
+          polls[poll.id] = getNormalizedPoll(poll);
           visiblePolls.push(poll.id);
-          owners[poll.owner.id] = {
-            ownerId: poll.owner.id,
-            name: poll.owner.name
-          };
+          owners[poll.owner.id] = getOwnerFromPoll(poll);
         }
 
         return dispatch(fetchPollsSuccess(polls, visiblePolls, owners));
       })
       .catch(error => dispatch(fetchPollsError(error)));
+  };
+}
+
+// Fetch single poll
+export const FETCH_SINGLE_POLL_REQUEST = 'FETCH_SINGLE_POLL_REQUEST';
+export function fetchSinglePollRequest() {
+  return {
+    type: FETCH_SINGLE_POLL_REQUEST
+  };
+}
+
+export const FETCH_SINGLE_POLL_SUCCESS = 'FETCH_SINGLE_POLL_SUCCESS';
+export function fetchSinglePollSuccess(poll, owner) {
+  return {
+    type: FETCH_SINGLE_POLL_SUCCESS,
+    poll,
+    owner
+  };
+}
+
+export const FETCH_SINGLE_POLL_ERROR = 'FETCH_SINGLE_POLL_ERROR';
+export function fetchSinglePollError(error) {
+  return {
+    type: FETCH_SINGLE_POLL_ERROR,
+    error
+  };
+}
+
+export function fetchSinglePoll(pollId) {
+  return dispatch => {
+    dispatch(fetchSinglePollRequest());
+
+    return fetch(apiDataUrl)
+      .then(response => response.json())
+      .then(body => {
+        const denormalizedPoll = body.find(poll => poll.id === pollId);
+        const owner = getOwnerFromPoll(denormalizedPoll);
+        const poll = getNormalizedPoll(denormalizedPoll);
+        return dispatch(fetchSinglePollSuccess(poll, owner));
+      })
+      .catch(error => dispatch(fetchSinglePollError(error)));
   };
 }
