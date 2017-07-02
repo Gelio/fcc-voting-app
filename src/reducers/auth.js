@@ -3,6 +3,7 @@ import { SIGN_IN, LOGOUT } from '../actions/auth';
 
 const defaultState = fromJS({
   authenticated: false,
+  userId: null,
   username: null
 });
 
@@ -11,12 +12,14 @@ function auth(state = defaultState, action) {
     case SIGN_IN:
       return state.merge({
         authenticated: true,
+        userId: action.userId,
         username: action.username
       });
 
     case LOGOUT:
       return state.merge({
         authenticated: false,
+        userId: null,
         username: null
       });
 
