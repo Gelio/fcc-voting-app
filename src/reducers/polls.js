@@ -4,10 +4,15 @@ import {
   REMOVE_POLL,
   VOTE,
   SET_VISIBLE_POLLS,
-  ADD_OWNER
+  ADD_OWNER,
+  FETCH_POLLS_BEGIN,
+  FETCH_POLLS_ERROR,
+  FETCH_POLLS_SUCCESS
 } from '../actions/polls';
 
 const defaultState = fromJS({
+  isFetching: false,
+  fetchingError: null,
   polls: {},
   visiblePolls: [],
   owners: {}
@@ -41,6 +46,27 @@ function polls(state = defaultState, action) {
         ownerId: action.ownerId,
         name: action.name
       }));
+
+    case FETCH_POLLS_BEGIN:
+      return state.merge({
+        isFetching: true,
+        fetchingError: null
+      });
+
+    case FETCH_POLLS_ERROR:
+      return state.merge({
+        isFetching: false,
+        fetchingError: action.error
+      });
+
+    case FETCH_POLLS_SUCCESS:
+      return state.merge({
+        isFetching: false,
+        fetchingError: null,
+        polls: state.get('polls').merge(action.polls),
+        visiblePolls: List(action.visiblePolls),
+        owners: state.get('owners').merge(action.owners)
+      });
 
     default:
       return state;
