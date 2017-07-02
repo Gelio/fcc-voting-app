@@ -11,6 +11,9 @@ import { Provider } from 'react-redux';
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import reducers from './reducers';
 
+// redux-thunk
+import thunk from 'redux-thunk';
+
 // router-redux
 import createHistory from 'history/createBrowserHistory';
 import {
@@ -20,7 +23,6 @@ import {
 } from 'react-router-redux';
 
 const history = createHistory();
-const middleware = routerMiddleware(history);
 
 const store = createStore(
   combineReducers({
@@ -28,7 +30,7 @@ const store = createStore(
     router: routerReducer
   }),
   compose(
-    applyMiddleware(middleware),
+    applyMiddleware(routerMiddleware(history), thunk),
     window.__REDUX_DEVTOOLS_EXTENSION__
       ? window.__REDUX_DEVTOOLS_EXTENSION__()
       : f => f
