@@ -6,6 +6,7 @@ import Home from './components/Home';
 import Navigation from './components/Navigation';
 import Footer from './components/Footer';
 import Polls from './containers/Polls';
+import SinglePoll from './containers/SinglePoll';
 
 class App extends Component {
   render() {
@@ -15,6 +16,7 @@ class App extends Component {
         <Switch>
           <Route exact path="/" component={Home} />
           <Route path="/polls" component={Polls} />
+          <Route path="/poll/:pollId" component={SinglePoll} />
         </Switch>
         <Footer />
       </div>
