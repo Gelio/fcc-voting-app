@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { fetchPolls } from '../actions/polls';
 
 import PollsList from '../components/PollsList';
 
@@ -7,14 +8,21 @@ const NoPollsAvailable = () => {
   return <p>No polls available. Sign in and create one.</p>;
 };
 
-const Polls = ({ polls }) => {
-  return (
-    <div className="container mt-2">
-      <h1>Polls list</h1>
-      {polls.length > 0 ? <PollsList polls={polls} /> : <NoPollsAvailable />}
-    </div>
-  );
-};
+class Polls extends Component {
+  componentDidMount() {
+    this.props.fetchPolls();
+  }
+
+  render() {
+    const { polls } = this.props;
+    return (
+      <div className="container mt-2">
+        <h1>Polls list</h1>
+        {polls.length > 0 ? <PollsList polls={polls} /> : <NoPollsAvailable />}
+      </div>
+    );
+  }
+}
 
 function mapStateToProps(state) {
   const polls = state.polls.get('polls');
@@ -22,9 +30,13 @@ function mapStateToProps(state) {
   return {
     // denormalized polls
     polls: polls
-      .map(poll => poll.set('owner', owners.get(poll.ownerId).toJS()))
+      .map(poll => poll.set('owner', owners.get(poll.get('ownerId'))).toJS())
       .toArray()
   };
 }
 
-export default connect(mapStateToProps)(Polls);
+const mapDispatchToProps = {
+  fetchPolls
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Polls);
