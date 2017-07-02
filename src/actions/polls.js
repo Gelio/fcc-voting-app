@@ -33,3 +33,12 @@ export function setVisiblePolls(pollIds) {
     pollIds
   };
 }
+
+export const ADD_OWNER = 'ADD_OWNER';
+export function addOwner(ownerId, name) {
+  return {
+    type: ADD_OWNER,
+    ownerId,
+    name
+  };
+}

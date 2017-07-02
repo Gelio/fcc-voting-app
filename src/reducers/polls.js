@@ -1,14 +1,16 @@
-import { List, fromJS } from 'immutable';
+import { Map, List, fromJS } from 'immutable';
 import {
   ADD_POLL,
   REMOVE_POLL,
   VOTE,
-  SET_VISIBLE_POLLS
+  SET_VISIBLE_POLLS,
+  ADD_OWNER
 } from '../actions/polls';
 
 const defaultState = fromJS({
   polls: {},
-  visiblePolls: []
+  visiblePolls: [],
+  owners: {}
 });
 
 function polls(state = defaultState, action) {
@@ -33,6 +35,12 @@ function polls(state = defaultState, action) {
 
     case SET_VISIBLE_POLLS:
       return state.set('visiblePolls', List(action.pollIds));
+
+    case ADD_OWNER:
+      return state.setIn(['owners', action.ownerId], Map({
+        ownerId: action.ownerId,
+        name: action.name
+      }));
 
     default:
       return state;
