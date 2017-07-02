@@ -4,6 +4,8 @@ import { fetchPolls } from '../actions/polls';
 
 import PollsList from '../components/PollsList';
 
+import { denormalizePoll } from '../utilities';
+
 const NoPollsAvailable = () => {
   return <p>No polls available. Sign in and create one.</p>;
 };
@@ -30,7 +32,7 @@ function mapStateToProps(state) {
   return {
     // denormalized polls
     polls: polls
-      .map(poll => poll.set('owner', owners.get(poll.get('ownerId'))).toJS())
+      .map(denormalizePoll.bind(null, owners))
       .toArray()
   };
 }
