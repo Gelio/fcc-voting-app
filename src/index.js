@@ -6,6 +6,8 @@ import registerServiceWorker from './registerServiceWorker';
 
 import 'bootstrap/dist/css/bootstrap.css';
 
+import * as firebase from 'firebase';
+
 // redux
 import { Provider } from 'react-redux';
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
@@ -21,6 +23,17 @@ import {
   routerReducer,
   routerMiddleware
 } from 'react-router-redux';
+
+// Initialize Firebase
+var config = {
+  apiKey: "AIzaSyBOYMcPGsljGvkgSdxmmM0ggY5heE0mMO8",
+  authDomain: "fcc-voting-app-cee77.firebaseapp.com",
+  databaseURL: "https://fcc-voting-app-cee77.firebaseio.com",
+  projectId: "fcc-voting-app-cee77",
+  storageBucket: "fcc-voting-app-cee77.appspot.com",
+  messagingSenderId: "144857868047"
+};
+firebase.initializeApp(config);
 
 const history = createHistory();
 
