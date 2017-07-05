@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchSinglePoll, vote } from '../actions/polls';
+import { fetchSinglePoll, vote, addOption } from '../actions/polls';
 
 import { denormalizePoll } from '../utilities';
 
@@ -20,7 +20,7 @@ class SinglePoll extends Component {
     if (poll) {
       return (
         <PageContainer>
-          <SinglePollComponent poll={poll} vote={this.props.vote} />
+          <SinglePollComponent poll={poll} vote={this.props.vote} addOption={this.props.addOption} />
         </PageContainer>
       );
     }
@@ -59,7 +59,8 @@ function mapStateToProps(state, props) {
 
 const mapDispatchToProps = {
   fetchSinglePoll,
-  vote
+  vote,
+  addOption
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SinglePoll);

@@ -27,8 +27,31 @@ Option.propTypes = {
 };
 
 class SinglePoll extends Component {
-  onChooseOption(optionId) {
+  constructor() {
+    super();
+
+    this.state = {
+      newOption: ''
+    };
+  }
+
+  vote(optionId) {
     this.props.vote(this.props.poll.pollId, optionId);
+  }
+
+  handleChange(event) {
+    this.setState({
+      newOption: event.target.value
+    });
+  }
+
+  addOption() {
+    const optionsCount = this.props.poll.options.length;
+    this.props.addOption(this.props.poll.pollId, this.state.newOption);
+    this.vote(optionsCount);
+    this.setState({
+      newOption: ''
+    });
   }
 
   render() {
@@ -54,11 +77,17 @@ class SinglePoll extends Component {
               key={i}
               title={option.title}
               percentage={option.votesCount / totalVotes * 100}
-              onChoose={this.onChooseOption.bind(this, i)}
+              onChoose={this.vote.bind(this, i)}
               isPicked={i === poll.optionPicked}
             />
           )}
         </ul>
+
+        <div className="mt-4">
+          <h3>Add an option</h3>
+          <input type="text" placeholder="New option" className="form-control mb-1" value={this.state.newOption} onChange={this.handleChange.bind(this)} />
+          <button type="submit" className="btn btn-primary" onClick={this.addOption.bind(this)}>Add</button>
+        </div>
       </div>
     );
   }

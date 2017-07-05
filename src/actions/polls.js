@@ -49,6 +49,15 @@ export function addOwner(ownerId, name) {
   };
 }
 
+export const ADD_OPTION = 'ADD_OPTION';
+export function addOption(pollId, title) {
+  return {
+    type: ADD_OPTION,
+    pollId,
+    title
+  };
+}
+
 // Fetching polls
 export const FETCH_POLLS_BEGIN = 'FETCH_POLLS_BEGIN';
 export function fetchPollsBegin() {

@@ -5,6 +5,7 @@ import {
   VOTE,
   SET_VISIBLE_POLLS,
   ADD_OWNER,
+  ADD_OPTION,
   FETCH_POLLS_BEGIN,
   FETCH_POLLS_ERROR,
   FETCH_POLLS_SUCCESS,
@@ -70,6 +71,15 @@ function polls(state = defaultState, action) {
           ownerId: action.ownerId,
           name: action.name
         })
+      );
+
+    case ADD_OPTION:
+      return state.updateIn(
+        ['polls', action.pollId, 'options'],
+        options => options.push(Map({
+          votesCount: 0,
+          title: action.title
+        }))
       );
 
     case FETCH_POLLS_BEGIN:
