@@ -29,7 +29,8 @@ function polls(state = defaultState, action) {
           pollId: action.pollId,
           ownerId: action.ownerId,
           title: action.title,
-          options: action.options
+          options: action.options,
+          optionPicked: action.optionPicked || null
         })
       );
 
@@ -37,9 +38,27 @@ function polls(state = defaultState, action) {
       return state.deleteIn(['polls', action.pollId]);
 
     case VOTE:
-      return state.updateIn(['polls', action.pollId, 'options'], options =>
-        options.update(action.optionId, 0, x => x + 1)
-      );
+      return state
+        .updateIn(['polls', action.pollId, 'options'], options => {
+          const previousOptionPicked = state.getIn([
+            'polls',
+            action.pollId,
+            'optionPicked'
+          ]);
+          if (typeof previousOptionPicked !== 'undefined') {
+            options = options.updateIn(
+              [previousOptionPicked, 'votesCount'],
+              x => x - 1
+            );
+          }
+
+          return options.updateIn(
+            [action.optionId, 'votesCount'],
+            0,
+            x => x + 1
+          );
+        })
+        .setIn(['polls', action.pollId, 'optionPicked'], action.optionId);
 
     case SET_VISIBLE_POLLS:
       return state.set('visiblePolls', List(action.pollIds));
@@ -90,9 +109,11 @@ function polls(state = defaultState, action) {
       return state.merge({
         isFetching: false,
         fetchingError: null,
-        polls: state.get('polls').set(action.poll.pollId, Map(action.poll)),
+        polls: state.get('polls').set(action.poll.pollId, fromJS(action.poll)),
         visiblePolls: state.get('visiblePolls').push(action.poll.pollId),
-        owners: state.get('owners').set(action.owner.ownerId, Map(action.owner))
+        owners: state
+          .get('owners')
+          .set(action.owner.ownerId, fromJS(action.owner))
       });
 
     default:

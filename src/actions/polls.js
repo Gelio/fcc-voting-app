@@ -4,13 +4,14 @@ import { getOwnerFromPoll, getNormalizedPoll } from '../utilities';
 const apiDataUrl = 'http://beta.json-generator.com/api/json/get/NkS8ZNzVm';
 
 export const ADD_POLL = 'ADD_POLL';
-export function addPoll(pollId, ownerId, title, options) {
+export function addPoll(pollId, ownerId, title, options, optionPicked) {
   return {
     type: ADD_POLL,
     pollId,
     ownerId,
     title,
-    options
+    options,
+    optionPicked
   };
 }
 
