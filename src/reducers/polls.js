@@ -1,6 +1,6 @@
 import { Map, fromJS } from 'immutable';
 import {
-  ADD_POLL,
+  IMPORT_POLL,
   REMOVE_POLL,
   VOTE,
   ADD_OPTION,
@@ -12,7 +12,7 @@ const defaultState = Map();
 
 function polls(state = defaultState, action) {
   switch (action.type) {
-    case ADD_POLL:
+    case IMPORT_POLL:
       return state.set(
         action.pollId,
         fromJS({

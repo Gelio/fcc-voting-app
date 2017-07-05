@@ -1,7 +1,7 @@
-export const ADD_POLL = 'ADD_POLL';
-export function addPoll(pollId, ownerId, title, options, optionPicked) {
+export const IMPORT_POLL = 'IMPORT_POLL';
+export function importPoll(pollId, ownerId, title, options, optionPicked) {
   return {
-    type: ADD_POLL,
+    type: IMPORT_POLL,
     pollId,
     ownerId,
     title,
