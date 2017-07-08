@@ -1,15 +1,15 @@
-export const SIGN_IN = 'SIGN_IN';
-export function signIn(userId, username) {
+export const SIGN_IN_BEGIN = 'SIGN_IN_BEGIN';
+export function signInBegin(userId, username) {
   return {
-    type: SIGN_IN,
+    type: SIGN_IN_BEGIN,
     userId,
     username
   };
 }
 
-export const LOGOUT = 'LOGOUT';
-export function logout() {
+export const LOGOUT_BEGIN = 'LOGOUT_BEGIN';
+export function logoutBegin() {
   return {
-    type: LOGOUT
+    type: LOGOUT_BEGIN
   };
 }

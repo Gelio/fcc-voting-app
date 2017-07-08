@@ -1,7 +1,7 @@
-import polls from './polls';
 import auth from './auth';
+import data from './data';
 
 export default {
   auth,
-  polls
+  data
 };

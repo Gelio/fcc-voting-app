@@ -59,15 +59,15 @@ export function addOption(pollId, title) {
 }
 
 // Fetching polls
-export const FETCH_POLLS_BEGIN = 'FETCH_POLLS_BEGIN';
-export function fetchPollsBegin() {
+export const FETCH_POLLS_REQUEST = 'FETCH_POLLS_REQUEST';
+function fetchPollsRequest() {
   return {
-    type: FETCH_POLLS_BEGIN
+    type: FETCH_POLLS_REQUEST
   };
 }
 
 export const FETCH_POLLS_SUCCESS = 'FETCH_POLLS_SUCCESS';
-export function fetchPollsSuccess(polls, visiblePolls, owners) {
+function fetchPollsSuccess(polls, visiblePolls, owners) {
   return {
     type: FETCH_POLLS_SUCCESS,
     polls,
@@ -77,17 +77,16 @@ export function fetchPollsSuccess(polls, visiblePolls, owners) {
 }
 
 export const FETCH_POLLS_ERROR = 'FETCH_POLLS_ERROR';
-export function fetchPollsError(error) {
+function fetchPollsError(error) {
   return {
     type: FETCH_POLLS_ERROR,
     error
   };
 }
 
-export const FETCH_POLLS = 'FETCH_POLLS';
 export function fetchPolls() {
   return dispatch => {
-    dispatch(fetchPollsBegin());
+    dispatch(fetchPollsRequest());
 
     return fetch(apiDataUrl)
       .then(response => response.json())
@@ -110,14 +109,14 @@ export function fetchPolls() {
 
 // Fetch single poll
 export const FETCH_SINGLE_POLL_REQUEST = 'FETCH_SINGLE_POLL_REQUEST';
-export function fetchSinglePollRequest() {
+function fetchSinglePollRequest() {
   return {
     type: FETCH_SINGLE_POLL_REQUEST
   };
 }
 
 export const FETCH_SINGLE_POLL_SUCCESS = 'FETCH_SINGLE_POLL_SUCCESS';
-export function fetchSinglePollSuccess(poll, owner) {
+function fetchSinglePollSuccess(poll, owner) {
   return {
     type: FETCH_SINGLE_POLL_SUCCESS,
     poll,
@@ -126,7 +125,7 @@ export function fetchSinglePollSuccess(poll, owner) {
 }
 
 export const FETCH_SINGLE_POLL_ERROR = 'FETCH_SINGLE_POLL_ERROR';
-export function fetchSinglePollError(error) {
+function fetchSinglePollError(error) {
   return {
     type: FETCH_SINGLE_POLL_ERROR,
     error

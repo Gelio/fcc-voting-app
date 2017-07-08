@@ -46,14 +46,14 @@ class SinglePoll extends Component {
 }
 
 function mapStateToProps(state, props) {
-  const owners = state.polls.get('owners');
-  const polls = state.polls.get('polls');
+  const owners = state.data.owners;
+  const polls = state.data.polls;
   const pollId = props.match.params.pollId;
 
   return {
     poll: denormalizePoll(owners, polls.get(pollId)),
     pollId,
-    isFetching: state.polls.get('isFetching')
+    isFetching: state.data.fetchingStates.getIn(['singlePoll', 'isFetching'])
   };
 }
 

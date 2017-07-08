@@ -28,8 +28,8 @@ class Polls extends Component {
 }
 
 function mapStateToProps(state) {
-  const polls = state.polls.get('polls');
-  const owners = state.polls.get('owners');
+  const polls = state.data.polls;
+  const owners = state.data.owners;
   return {
     // denormalized polls
     polls: polls
