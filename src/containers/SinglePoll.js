@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { fetchSinglePoll, vote, addOption } from '../actions/polls';
 
@@ -20,7 +21,11 @@ class SinglePoll extends Component {
     if (poll) {
       return (
         <PageContainer>
-          <SinglePollComponent poll={poll} vote={this.props.vote} addOption={this.props.addOption} />
+          <SinglePollComponent
+            poll={poll}
+            vote={this.props.vote}
+            addOption={this.props.addOption}
+          />
         </PageContainer>
       );
     }
@@ -45,6 +50,15 @@ class SinglePoll extends Component {
   }
 }
 
+SinglePoll.propTypes = {
+  fetchSinglePoll: PropTypes.func.isRequired,
+  poll: PropTypes.object.isRequired,
+  pollId: PropTypes.string.isRequired,
+  isFetching: PropTypes.bool.isRequired,
+  vote: PropTypes.func.isRequired,
+  addOption: PropTypes.func.isRequired,
+};
+
 function mapStateToProps(state, props) {
   const owners = state.data.owners;
   const polls = state.data.polls;
@@ -53,14 +67,14 @@ function mapStateToProps(state, props) {
   return {
     poll: denormalizePoll(owners, polls.get(pollId)),
     pollId,
-    isFetching: state.data.fetchingStates.getIn(['singlePoll', 'isFetching'])
+    isFetching: state.data.fetchingStates.getIn(['singlePoll', 'isFetching']),
   };
 }
 
 const mapDispatchToProps = {
   fetchSinglePoll,
   vote,
-  addOption
+  addOption,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SinglePoll);

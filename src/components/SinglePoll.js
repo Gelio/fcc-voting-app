@@ -5,8 +5,8 @@ import './SinglePoll.css';
 
 const Option = ({ title, percentage, onChoose, isPicked }) => {
   const classes =
-    'list-group-item list-group-item-action justify-content-between option' +
-    (isPicked ? ' list-group-item-success' : '');
+    `list-group-item list-group-item-action justify-content-between option${
+    isPicked ? ' list-group-item-success' : ''}`;
 
   return (
     <li className={classes} onClick={onChoose}>
@@ -23,7 +23,7 @@ Option.propTypes = {
   title: PropTypes.string.isRequired,
   percentage: PropTypes.number.isRequired,
   onChoose: PropTypes.func.isRequired,
-  isPicked: PropTypes.bool.isRequired
+  isPicked: PropTypes.bool.isRequired,
 };
 
 class SinglePoll extends Component {
@@ -31,17 +31,21 @@ class SinglePoll extends Component {
     super();
 
     this.state = {
-      newOption: ''
+      newOption: '',
     };
+
+    this.vote = this.vote.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.addOption = this.addOption.bind(this);
   }
 
   vote(optionId) {
-    this.props.vote(this.props.poll.pollId, optionId);
+    return () => this.props.vote(this.props.poll.pollId, optionId);
   }
 
   handleChange(event) {
     this.setState({
-      newOption: event.target.value
+      newOption: event.target.value,
     });
   }
 
@@ -50,7 +54,7 @@ class SinglePoll extends Component {
     this.props.addOption(this.props.poll.pollId, this.state.newOption);
     this.vote(optionsCount);
     this.setState({
-      newOption: ''
+      newOption: '',
     });
   }
 
@@ -58,7 +62,7 @@ class SinglePoll extends Component {
     const poll = this.props.poll;
     const totalVotes = poll.options.reduce(
       (total, option) => total + option.votesCount,
-      0
+      0,
     );
 
     return (
@@ -73,29 +77,29 @@ class SinglePoll extends Component {
         <h3>Options:</h3>
         <ul className="list-group">
           {poll.options.map((option, i) =>
-            <Option
+            (<Option
               key={i}
               title={option.title}
-              percentage={option.votesCount / totalVotes * 100}
-              onChoose={this.vote.bind(this, i)}
+              percentage={(option.votesCount / totalVotes) * 100}
+              onChoose={this.vote(i)}
               isPicked={i === poll.optionPicked}
-            />
+            />),
           )}
         </ul>
 
         <div className="mt-4">
           <h3>Add an option</h3>
-          <input type="text" placeholder="New option" className="form-control mb-1" value={this.state.newOption} onChange={this.handleChange.bind(this)} />
-          <button type="submit" className="btn btn-primary" onClick={this.addOption.bind(this)}>Add</button>
+          <input type="text" placeholder="New option" className="form-control mb-1" value={this.state.newOption} onChange={this.handleChange} />
+          <button type="submit" className="btn btn-primary" onClick={this.addOption}>Add</button>
         </div>
       </div>
     );
   }
 }
 SinglePoll.propTypes = {
+  addOption: PropTypes.func.isRequired,
   poll: PropTypes.object.isRequired,
-  optionPicked: PropTypes.number,
-  vote: PropTypes.func.isRequired
+  vote: PropTypes.func.isRequired,
 };
 
 export default SinglePoll;

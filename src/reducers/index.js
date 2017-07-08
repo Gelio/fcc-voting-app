@@ -3,5 +3,5 @@ import data from './data';
 
 export default {
   auth,
-  data
+  data,
 };

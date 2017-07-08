@@ -5,30 +5,30 @@ import {
   FETCH_POLLS_SUCCESS,
   FETCH_SINGLE_POLL_ERROR,
   FETCH_SINGLE_POLL_REQUEST,
-  FETCH_SINGLE_POLL_SUCCESS
+  FETCH_SINGLE_POLL_SUCCESS,
 } from '../actions/polls';
 
 const FetchingStateFactory = {
   idle: () =>
     Map({
       isFetching: false,
-      error: null
+      error: null,
     }),
   error: error =>
     Map({
       isFetching: false,
-      error
+      error,
     }),
   pending: () =>
     Map({
       isFetching: true,
-      error: null
-    })
+      error: null,
+    }),
 };
 
 const defaultState = Map({
   polls: FetchingStateFactory.idle(),
-  singlePoll: FetchingStateFactory.idle()
+  singlePoll: FetchingStateFactory.idle(),
 });
 
 function fetchingStates(state = defaultState, action) {

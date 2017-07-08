@@ -11,7 +11,7 @@ export function addPoll(pollId, ownerId, title, options, optionPicked) {
     ownerId,
     title,
     options,
-    optionPicked
+    optionPicked,
   };
 }
 
@@ -19,7 +19,7 @@ export const REMOVE_POLL = 'REMOVE_POLL';
 export function removePoll(pollId) {
   return {
     type: REMOVE_POLL,
-    pollId
+    pollId,
   };
 }
 
@@ -28,7 +28,7 @@ export function vote(pollId, optionId) {
   return {
     type: VOTE,
     pollId,
-    optionId
+    optionId,
   };
 }
 
@@ -36,7 +36,7 @@ export const SET_VISIBLE_POLLS = 'SET_VISIBLE_POLLS';
 export function setVisiblePolls(pollIds) {
   return {
     type: SET_VISIBLE_POLLS,
-    pollIds
+    pollIds,
   };
 }
 
@@ -45,7 +45,7 @@ export function addOwner(ownerId, name) {
   return {
     type: ADD_OWNER,
     ownerId,
-    name
+    name,
   };
 }
 
@@ -54,7 +54,7 @@ export function addOption(pollId, title) {
   return {
     type: ADD_OPTION,
     pollId,
-    title
+    title,
   };
 }
 
@@ -62,7 +62,7 @@ export function addOption(pollId, title) {
 export const FETCH_POLLS_REQUEST = 'FETCH_POLLS_REQUEST';
 function fetchPollsRequest() {
   return {
-    type: FETCH_POLLS_REQUEST
+    type: FETCH_POLLS_REQUEST,
   };
 }
 
@@ -72,7 +72,7 @@ function fetchPollsSuccess(polls, visiblePolls, owners) {
     type: FETCH_POLLS_SUCCESS,
     polls,
     visiblePolls,
-    owners
+    owners,
   };
 }
 
@@ -80,26 +80,26 @@ export const FETCH_POLLS_ERROR = 'FETCH_POLLS_ERROR';
 function fetchPollsError(error) {
   return {
     type: FETCH_POLLS_ERROR,
-    error
+    error,
   };
 }
 
 export function fetchPolls() {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(fetchPollsRequest());
 
     return fetch(apiDataUrl)
       .then(response => response.json())
-      .then(body => {
+      .then((body) => {
         const polls = {};
         const visiblePolls = [];
         const owners = {};
 
-        for (const poll of body) {
+        body.forEach((poll) => {
           polls[poll.id] = getNormalizedPoll(poll);
           visiblePolls.push(poll.id);
           owners[poll.owner.id] = getOwnerFromPoll(poll);
-        }
+        });
 
         return dispatch(fetchPollsSuccess(polls, visiblePolls, owners));
       })
@@ -111,7 +111,7 @@ export function fetchPolls() {
 export const FETCH_SINGLE_POLL_REQUEST = 'FETCH_SINGLE_POLL_REQUEST';
 function fetchSinglePollRequest() {
   return {
-    type: FETCH_SINGLE_POLL_REQUEST
+    type: FETCH_SINGLE_POLL_REQUEST,
   };
 }
 
@@ -120,7 +120,7 @@ function fetchSinglePollSuccess(poll, owner) {
   return {
     type: FETCH_SINGLE_POLL_SUCCESS,
     poll,
-    owner
+    owner,
   };
 }
 
@@ -128,17 +128,17 @@ export const FETCH_SINGLE_POLL_ERROR = 'FETCH_SINGLE_POLL_ERROR';
 function fetchSinglePollError(error) {
   return {
     type: FETCH_SINGLE_POLL_ERROR,
-    error
+    error,
   };
 }
 
 export function fetchSinglePoll(pollId) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(fetchSinglePollRequest());
 
     return fetch(apiDataUrl)
       .then(response => response.json())
-      .then(body => {
+      .then((body) => {
         const denormalizedPoll = body.find(poll => poll.id === pollId);
         const owner = getOwnerFromPoll(denormalizedPoll);
         const poll = getNormalizedPoll(denormalizedPoll);

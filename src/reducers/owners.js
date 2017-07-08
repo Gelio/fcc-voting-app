@@ -2,7 +2,7 @@ import { Map, fromJS } from 'immutable';
 import {
   ADD_OWNER,
   FETCH_POLLS_SUCCESS,
-  FETCH_SINGLE_POLL_SUCCESS
+  FETCH_SINGLE_POLL_SUCCESS,
 } from '../actions/polls';
 
 const defaultState = Map();
@@ -14,8 +14,8 @@ function owners(state = defaultState, action) {
         action.ownerId,
         Map({
           ownerId: action.ownerId,
-          name: action.name
-        })
+          name: action.name,
+        }),
       );
 
     case FETCH_POLLS_SUCCESS:

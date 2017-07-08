@@ -9,5 +9,5 @@ export default combineReducers({
   fetchingStates,
   polls,
   owners,
-  visiblePolls
+  visiblePolls,
 });

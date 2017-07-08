@@ -3,7 +3,7 @@ import { List } from 'immutable';
 import {
   SET_VISIBLE_POLLS,
   FETCH_POLLS_SUCCESS,
-  FETCH_SINGLE_POLL_SUCCESS
+  FETCH_SINGLE_POLL_SUCCESS,
 } from '../actions/polls';
 
 const defaultState = List();

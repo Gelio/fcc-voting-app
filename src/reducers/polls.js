@@ -5,7 +5,7 @@ import {
   VOTE,
   ADD_OPTION,
   FETCH_POLLS_SUCCESS,
-  FETCH_SINGLE_POLL_SUCCESS
+  FETCH_SINGLE_POLL_SUCCESS,
 } from '../actions/polls';
 
 const defaultState = Map();
@@ -20,8 +20,8 @@ function polls(state = defaultState, action) {
           ownerId: action.ownerId,
           title: action.title,
           options: action.options,
-          optionPicked: action.optionPicked || null
-        })
+          optionPicked: action.optionPicked || null,
+        }),
       );
 
     case REMOVE_POLL:
@@ -29,22 +29,24 @@ function polls(state = defaultState, action) {
 
     case VOTE:
       return state
-        .updateIn([action.pollId, 'options'], options => {
+        .updateIn([action.pollId, 'options'], (options) => {
           const previousOptionPicked = state.getIn([
             action.pollId,
-            'optionPicked'
+            'optionPicked',
           ]);
+
+          let optionsModified = options;
           if (typeof previousOptionPicked !== 'undefined') {
-            options = options.updateIn(
+            optionsModified = options.updateIn(
               [previousOptionPicked, 'votesCount'],
-              x => x - 1
+              x => x - 1,
             );
           }
 
-          return options.updateIn(
+          return optionsModified.updateIn(
             [action.optionId, 'votesCount'],
             0,
-            x => x + 1
+            x => x + 1,
           );
         })
         .setIn([action.pollId, 'optionPicked'], action.optionId);
@@ -54,9 +56,9 @@ function polls(state = defaultState, action) {
         options.push(
           Map({
             votesCount: 0,
-            title: action.title
-          })
-        )
+            title: action.title,
+          }),
+        ),
       );
 
     case FETCH_POLLS_SUCCESS:

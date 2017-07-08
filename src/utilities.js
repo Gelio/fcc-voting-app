@@ -5,7 +5,7 @@ export function denormalizePoll(owners, poll) {
 export function getOwnerFromPoll(denormalizedPoll) {
   return {
     ownerId: denormalizedPoll.owner.id,
-    name: denormalizedPoll.owner.name
+    name: denormalizedPoll.owner.name,
   };
 }
 
@@ -14,6 +14,6 @@ export function getNormalizedPoll(poll) {
     pollId: poll.id,
     ownerId: poll.owner.id,
     title: poll.title,
-    options: poll.options
+    options: poll.options,
   };
 }

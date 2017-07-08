@@ -3,13 +3,13 @@ export function signInBegin(userId, username) {
   return {
     type: SIGN_IN_BEGIN,
     userId,
-    username
+    username,
   };
 }
 
 export const LOGOUT_BEGIN = 'LOGOUT_BEGIN';
 export function logoutBegin() {
   return {
-    type: LOGOUT_BEGIN
+    type: LOGOUT_BEGIN,
   };
 }
