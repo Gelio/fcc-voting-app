@@ -2,10 +2,10 @@ import { Map } from 'immutable';
 
 import ownersReducer from './owners';
 import {
-  addOwner,
   fetchPollsSuccess,
   fetchSinglePollSuccess,
 } from '../actions/polls';
+import { setOwner } from '../actions/owners';
 
 it('returns the initial state', () => {
   const state = ownersReducer(undefined, {});
@@ -16,13 +16,14 @@ it('returns the initial state', () => {
 it('adds an owner', () => {
   const initialState = Map();
 
-  const state = ownersReducer(initialState, addOwner(1, 'Test'));
+  const owner = {
+    ownerId: 1,
+    name: 'Test',
+  };
+  const state = ownersReducer(initialState, setOwner(1, owner));
 
   expect(state.toJS()).toEqual({
-    1: {
-      ownerId: 1,
-      name: 'Test',
-    },
+    1: owner,
   });
 });
 

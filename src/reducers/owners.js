@@ -1,21 +1,18 @@
 import { Map, fromJS } from 'immutable';
 import {
-  ADD_OWNER,
   FETCH_POLLS_SUCCESS,
   FETCH_SINGLE_POLL_SUCCESS,
 } from '../actions/polls';
+import { SET_OWNER } from '../actions/owners';
 
 const defaultState = Map();
 
 function owners(state = defaultState, action) {
   switch (action.type) {
-    case ADD_OWNER:
+    case SET_OWNER:
       return state.set(
         action.ownerId,
-        Map({
-          ownerId: action.ownerId,
-          name: action.name,
-        }),
+        Map(action.owner),
       );
 
     case FETCH_POLLS_SUCCESS:

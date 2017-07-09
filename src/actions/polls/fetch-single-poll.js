@@ -1,5 +1,8 @@
 import fetch from 'isomorphic-fetch';
-import { getOwnerFromPoll, getNormalizedPoll } from '../../utilities';
+
+import { database } from 'firebase';
+
+import { OwnerFactory, PollFactory } from '../../factories';
 
 const apiDataUrl = 'http://beta.json-generator.com/api/json/get/NkS8ZNzVm';
 
@@ -28,17 +31,29 @@ export function fetchSinglePollError(error) {
 }
 
 export function fetchSinglePoll(pollId) {
-  return (dispatch) => {
+  return async (dispatch) => {
     dispatch(fetchSinglePollRequest());
 
-    return fetch(apiDataUrl)
-      .then(response => response.json())
-      .then((body) => {
-        const denormalizedPoll = body.find(poll => poll.id === pollId);
-        const owner = getOwnerFromPoll(denormalizedPoll);
-        const poll = getNormalizedPoll(denormalizedPoll);
-        return dispatch(fetchSinglePollSuccess(poll, owner));
-      })
-      .catch(error => dispatch(fetchSinglePollError(error)));
+    let poll;
+    try {
+      poll = await database()
+        .ref(`polls/${pollId}`)
+        .once('value')
+        .then(snapshot => snapshot.val());
+    } catch (error) {
+      return dispatch(fetchSinglePollError(error));
+    }
+
+    let owner;
+    try {
+      owner = await database()
+        .ref(`owners/${poll.ownerId}`)
+        .once('value')
+        .then(snapshot => snapshot.val());
+    } catch (error) {
+      return dispatch(fetchSinglePollError(error));
+    }
+
+    return dispatch(fetchSinglePollSuccess(poll, owner));
   };
 }

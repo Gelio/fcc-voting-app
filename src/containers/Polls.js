@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { fetchPolls } from '../actions/polls';
+import PollFactory from '../factories/poll-factory';
 
 import PollsList from '../components/PollsList';
 import PageContainer from '../components/PageContainer';
-
-import { denormalizePoll } from '../utilities';
 
 const NoPollsAvailable = () => <p>No polls available. Sign in and create one.</p>;
 
@@ -37,7 +36,7 @@ function mapStateToProps(state) {
   return {
     // denormalized polls
     polls: polls
-      .map(denormalizePoll.bind(null, owners))
+      .map(PollFactory.denormalize.bind(null, owners))
       .toArray(),
   };
 }

@@ -10,7 +10,7 @@ const Poll = ({ pollId, title }) => (
   );
 
 Poll.propTypes = {
-  pollId: PropTypes.number.isRequired,
+  pollId: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
 };
 

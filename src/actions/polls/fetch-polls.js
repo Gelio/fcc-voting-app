@@ -1,7 +1,4 @@
-import fetch from 'isomorphic-fetch';
-import { getOwnerFromPoll, getNormalizedPoll } from '../../utilities';
-
-const apiDataUrl = 'http://beta.json-generator.com/api/json/get/NkS8ZNzVm';
+import { database } from 'firebase';
 
 export const FETCH_POLLS_REQUEST = 'FETCH_POLLS_REQUEST';
 export function fetchPollsRequest() {
@@ -29,24 +26,43 @@ export function fetchPollsError(error) {
 }
 
 export function fetchPolls() {
-  return (dispatch) => {
+  return async (dispatch) => {
     dispatch(fetchPollsRequest());
 
-    return fetch(apiDataUrl)
-      .then(response => response.json())
-      .then((body) => {
-        const polls = {};
-        const visiblePolls = [];
-        const owners = {};
+    let snapshot;
+    try {
+      snapshot = await database().ref('polls').limitToFirst(5).once('value');
+    } catch (error) {
+      return dispatch(fetchPollsError(error));
+    }
 
-        body.forEach((poll) => {
-          polls[poll.id] = getNormalizedPoll(poll);
-          visiblePolls.push(poll.id);
-          owners[poll.owner.id] = getOwnerFromPoll(poll);
-        });
+    const polls = {};
+    const visiblePolls = [];
+    const ownersNeeded = [];
 
-        return dispatch(fetchPollsSuccess(polls, visiblePolls, owners));
-      })
-      .catch(error => dispatch(fetchPollsError(error)));
+    snapshot.forEach((childSnapshot) => {
+      const childValue = childSnapshot.val();
+      polls[childValue.pollId] = childValue;
+      visiblePolls.push(childValue.pollId);
+      if (ownersNeeded.indexOf(childValue.ownerId) === -1) {
+        ownersNeeded.push(childValue.ownerId);
+      }
+    });
+
+    const ownersArray = await Promise.all(
+      ownersNeeded.map(ownerId =>
+        database().ref(`owners/${ownerId}`).once('value').then(x => x.val()),
+      ),
+    );
+
+    const owners = ownersArray.reduce(
+      (map, owner) =>
+        Object.assign(map, {
+          [owner.ownerId]: owner,
+        }),
+      {},
+    );
+
+    return dispatch(fetchPollsSuccess(polls, visiblePolls, owners));
   };
 }

@@ -60,10 +60,14 @@ class SinglePoll extends Component {
 
   render() {
     const poll = this.props.poll;
-    const totalVotes = poll.options.reduce(
+    let totalVotes = poll.options.reduce(
       (total, option) => total + option.votesCount,
       0,
     );
+
+    if (totalVotes === 0) {
+      totalVotes = 1; // prevents division by 0
+    }
 
     return (
       <div>

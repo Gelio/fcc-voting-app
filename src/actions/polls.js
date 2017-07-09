@@ -1,3 +1,5 @@
+import { vote as firebaseVote } from '../firebase/polls';
+
 export const IMPORT_POLL = 'IMPORT_POLL';
 export function importPoll(pollId, ownerId, title, options, optionPicked) {
   return {
@@ -20,10 +22,13 @@ export function removePoll(pollId) {
 
 export const VOTE = 'VOTE';
 export function vote(pollId, optionId) {
-  return {
-    type: VOTE,
-    pollId,
-    optionId,
+  return async (dispatch) => {
+    await firebaseVote(1, pollId, optionId);
+    return dispatch({
+      type: VOTE,
+      pollId,
+      optionId,
+    });
   };
 }
 
@@ -32,15 +37,6 @@ export function setVisiblePolls(pollIds) {
   return {
     type: SET_VISIBLE_POLLS,
     pollIds,
-  };
-}
-
-export const ADD_OWNER = 'ADD_OWNER';
-export function addOwner(ownerId, name) {
-  return {
-    type: ADD_OWNER,
-    ownerId,
-    name,
   };
 }
 

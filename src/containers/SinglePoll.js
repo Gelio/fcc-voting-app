@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { fetchSinglePoll, vote, addOption } from '../actions/polls';
-
-import { denormalizePoll } from '../utilities';
+import PollFactory from '../factories/poll-factory';
 
 import SinglePollComponent from '../components/SinglePoll';
 import PageContainer from '../components/PageContainer';
@@ -34,7 +33,7 @@ class SinglePoll extends Component {
       return (
         <PageContainer>
           <div className="alert alert-info">
-            Fetching the polls, please wait...
+            Fetching the poll, please wait...
           </div>
         </PageContainer>
       );
@@ -52,20 +51,25 @@ class SinglePoll extends Component {
 
 SinglePoll.propTypes = {
   fetchSinglePoll: PropTypes.func.isRequired,
-  poll: PropTypes.object.isRequired,
+  poll: PropTypes.object,
   pollId: PropTypes.string.isRequired,
   isFetching: PropTypes.bool.isRequired,
   vote: PropTypes.func.isRequired,
   addOption: PropTypes.func.isRequired,
 };
 
+SinglePoll.defaultProps = {
+  poll: null,
+};
+
 function mapStateToProps(state, props) {
   const owners = state.data.owners;
   const polls = state.data.polls;
   const pollId = props.match.params.pollId;
+  const normalizedPoll = polls.get(pollId);
 
   return {
-    poll: denormalizePoll(owners, polls.get(pollId)),
+    poll: normalizedPoll && PollFactory.denormalize(owners, normalizedPoll),
     pollId,
     isFetching: state.data.fetchingStates.getIn(['singlePoll', 'isFetching']),
   };

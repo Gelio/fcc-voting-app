@@ -44,7 +44,7 @@ class CreatePoll extends Component {
   }
 
   createPoll() {
-    createPoll(5, this.state.title, this.state.options);
+    createPoll(1, this.state.title, this.state.options);
     this.setState({
       title: '',
       options: [''],
