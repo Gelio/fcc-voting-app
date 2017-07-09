@@ -1,8 +1,3 @@
-import fetch from 'isomorphic-fetch';
-import { getOwnerFromPoll, getNormalizedPoll } from '../utilities';
-
-const apiDataUrl = 'http://beta.json-generator.com/api/json/get/NkS8ZNzVm';
-
 export const ADD_POLL = 'ADD_POLL';
 export function addPoll(pollId, ownerId, title, options, optionPicked) {
   return {
@@ -59,91 +54,7 @@ export function addOption(pollId, title) {
 }
 
 // Fetching polls
-export const FETCH_POLLS_REQUEST = 'FETCH_POLLS_REQUEST';
-function fetchPollsRequest() {
-  return {
-    type: FETCH_POLLS_REQUEST,
-  };
-}
-
-export const FETCH_POLLS_SUCCESS = 'FETCH_POLLS_SUCCESS';
-function fetchPollsSuccess(polls, visiblePolls, owners) {
-  return {
-    type: FETCH_POLLS_SUCCESS,
-    polls,
-    visiblePolls,
-    owners,
-  };
-}
-
-export const FETCH_POLLS_ERROR = 'FETCH_POLLS_ERROR';
-function fetchPollsError(error) {
-  return {
-    type: FETCH_POLLS_ERROR,
-    error,
-  };
-}
-
-export function fetchPolls() {
-  return (dispatch) => {
-    dispatch(fetchPollsRequest());
-
-    return fetch(apiDataUrl)
-      .then(response => response.json())
-      .then((body) => {
-        const polls = {};
-        const visiblePolls = [];
-        const owners = {};
-
-        body.forEach((poll) => {
-          polls[poll.id] = getNormalizedPoll(poll);
-          visiblePolls.push(poll.id);
-          owners[poll.owner.id] = getOwnerFromPoll(poll);
-        });
-
-        return dispatch(fetchPollsSuccess(polls, visiblePolls, owners));
-      })
-      .catch(error => dispatch(fetchPollsError(error)));
-  };
-}
+export * from './polls/fetch-polls';
 
 // Fetch single poll
-export const FETCH_SINGLE_POLL_REQUEST = 'FETCH_SINGLE_POLL_REQUEST';
-function fetchSinglePollRequest() {
-  return {
-    type: FETCH_SINGLE_POLL_REQUEST,
-  };
-}
-
-export const FETCH_SINGLE_POLL_SUCCESS = 'FETCH_SINGLE_POLL_SUCCESS';
-function fetchSinglePollSuccess(poll, owner) {
-  return {
-    type: FETCH_SINGLE_POLL_SUCCESS,
-    poll,
-    owner,
-  };
-}
-
-export const FETCH_SINGLE_POLL_ERROR = 'FETCH_SINGLE_POLL_ERROR';
-function fetchSinglePollError(error) {
-  return {
-    type: FETCH_SINGLE_POLL_ERROR,
-    error,
-  };
-}
-
-export function fetchSinglePoll(pollId) {
-  return (dispatch) => {
-    dispatch(fetchSinglePollRequest());
-
-    return fetch(apiDataUrl)
-      .then(response => response.json())
-      .then((body) => {
-        const denormalizedPoll = body.find(poll => poll.id === pollId);
-        const owner = getOwnerFromPoll(denormalizedPoll);
-        const poll = getNormalizedPoll(denormalizedPoll);
-        return dispatch(fetchSinglePollSuccess(poll, owner));
-      })
-      .catch(error => dispatch(fetchSinglePollError(error)));
-  };
-}
+export * from './polls/fetch-single-poll';
