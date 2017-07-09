@@ -1,9 +1,8 @@
 export const SIGN_IN_BEGIN = 'SIGN_IN_BEGIN';
-export function signInBegin(userId, username) {
+export function signInBegin(userId) {
   return {
     type: SIGN_IN_BEGIN,
     userId,
-    username,
   };
 }
 
