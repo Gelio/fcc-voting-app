@@ -4,14 +4,14 @@ import { getOwnerFromPoll, getNormalizedPoll } from '../../utilities';
 const apiDataUrl = 'http://beta.json-generator.com/api/json/get/NkS8ZNzVm';
 
 export const FETCH_POLLS_REQUEST = 'FETCH_POLLS_REQUEST';
-function fetchPollsRequest() {
+export function fetchPollsRequest() {
   return {
     type: FETCH_POLLS_REQUEST,
   };
 }
 
 export const FETCH_POLLS_SUCCESS = 'FETCH_POLLS_SUCCESS';
-function fetchPollsSuccess(polls, visiblePolls, owners) {
+export function fetchPollsSuccess(polls, visiblePolls, owners) {
   return {
     type: FETCH_POLLS_SUCCESS,
     polls,
@@ -21,7 +21,7 @@ function fetchPollsSuccess(polls, visiblePolls, owners) {
 }
 
 export const FETCH_POLLS_ERROR = 'FETCH_POLLS_ERROR';
-function fetchPollsError(error) {
+export function fetchPollsError(error) {
   return {
     type: FETCH_POLLS_ERROR,
     error,

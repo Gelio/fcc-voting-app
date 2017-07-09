@@ -1,8 +1,14 @@
 {
-  "extends": ["react-app", "airbnb"],
+  "extends": ["react-app", "airbnb", "plugin:jest/recommended"],
   "rules": {
     "linebreak-style": "off",
     "comma-dangle": "error",
     "react/jsx-filename-extension": "off"
+  },
+  "plugins": [
+    "jest"
+  ],
+  "env": {
+    "jest/globals": true
   }
 }
