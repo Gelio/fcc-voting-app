@@ -10,7 +10,7 @@ const AppNavLink = ({ exact, to, children }) =>
 AppNavLink.propTypes = {
   exact: PropTypes.bool,
   to: PropTypes.string.isRequired,
-  children: PropTypes.children.isRequired,
+  children: PropTypes.node.isRequired,
 };
 
 AppNavLink.defaultProps = {
