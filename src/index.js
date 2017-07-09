@@ -2,29 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 
-
 import * as firebase from 'firebase';
 
-// redux
 import { Provider } from 'react-redux';
-import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
-
-// redux-thunk
-import thunk from 'redux-thunk';
-
-// router-redux
-import createHistory from 'history/createBrowserHistory';
-import {
-  ConnectedRouter,
-  routerReducer,
-  routerMiddleware,
-} from 'react-router-redux';
-
+import { ConnectedRouter } from 'react-router-redux';
 
 import './index.css';
 import App from './App';
+import { store, history } from './store';
 import registerServiceWorker from './registerServiceWorker';
-import reducers from './reducers';
 
 // Initialize Firebase
 const config = {
@@ -36,23 +22,6 @@ const config = {
   messagingSenderId: '144857868047',
 };
 firebase.initializeApp(config);
-
-const history = createHistory();
-
-/* eslint-disable */
-const store = createStore(
-  combineReducers({
-    ...reducers,
-    router: routerReducer,
-  }),
-  compose(
-    applyMiddleware(routerMiddleware(history), thunk),
-    window.__REDUX_DEVTOOLS_EXTENSION__
-      ? window.__REDUX_DEVTOOLS_EXTENSION__()
-      : f => f,
-  ),
-);
-/* eslint-enable */
 
 ReactDOM.render(
   <Provider store={store}>

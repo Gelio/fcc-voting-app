@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { Route, Switch } from 'react-router';
@@ -8,10 +9,10 @@ import Footer from './components/Footer';
 import Polls from './containers/Polls';
 import SinglePoll from './containers/SinglePoll';
 
-function App() {
+function App(props) {
   return (
     <div>
-      <Navigation authenticated={this.props.auth.get('authenticated')} />
+      <Navigation authenticated={props.auth.get('authenticated')} />
       <Switch>
         <Route exact path="/" component={Home} />
         <Route path="/polls" component={Polls} />
@@ -21,6 +22,13 @@ function App() {
     </div>
   );
 }
+
+/* eslint-disable */
+App.propTypes = {
+  auth: PropTypes.object.isRequired,
+  router: PropTypes.object.isRequired,
+};
+/* eslint-enable */
 
 function mapStateToProps(state) {
   return {
